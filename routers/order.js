@@ -5,13 +5,13 @@ import { prescription } from '../middleware/multer.js'
 
 const router = express.Router()
 
-router.post("/orderWithoutAuth",prescription,handleOrder)
+router.post("/orderWithoutAuth", prescription, handleOrder)
 
 router.use(isAuthenticated)
 
-router.post("/order",prescription,handleOrder)
-router.put("/updateorder/:id",handleConfirmOrder)
-router.get("/myorder",handleMyOrder)
+router.post("/order", prescription, handleOrder)
+router.put("/updateorder/:id", handleConfirmOrder)
+router.get("/myorder", handleMyOrder)
 
 
 export default router
