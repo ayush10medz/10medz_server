@@ -9,34 +9,39 @@ export const handleOrder = TryCatch(async (req, res, next) => {
   const { name, remark, location } = req.body;
 
   if (!name) return next(new ErrorHandler("Name is required", 401));
-  if (!location) return next(new ErrorHandler("Locationo is required", 401));
+  if (!location) return next(new ErrorHandler("Location is required", 401));
 
   // Cloudinary setup - assuming you have it configured
-  const file = req.file; // Correct file extraction
+  const file = req.file;
   if (!file) return next(new ErrorHandler("Please upload a prescription", 404));
 
-  const result = await uploadFilesToCloudinary([file]); // Assuming this is a function you've written
+  const result = await uploadFilesToCloudinary([file]);
 
   const prescriptionLink = {
     public_id: result[0].public_id,
     url: result[0].url,
   };
 
-  const order = new Order({
-    user: req.user,
+  // Create order object based on whether user is authenticated
+  const orderData = {
     name: name,
     prescriptionLink,
     location,
     remark,
-  });
-  await order.save();
-  const user = await User.findById({ _id: req.user });
-  if (!user) return next(new ErrorHandler("user not exist"), 401);
+  };
 
-  const realTimeOrder = {
+  // Only add user if authenticated
+  if (req.user) {
+    orderData.user = req.user;
+  }
+
+  const order = new Order(orderData);
+  await order.save();
+
+  // Prepare response data
+  const responseData = {
     _id: order._id,
     name: name,
-    phoneNumber: user?.phoneNumber,
     prescriptionLink: prescriptionLink.url,
     price: order.price,
     billLink: order?.billLink?.url,
@@ -46,13 +51,21 @@ export const handleOrder = TryCatch(async (req, res, next) => {
     createdAt: order.createdAt,
   };
 
+  // Add user phone number if authenticated
+  if (req.user) {
+    const user = await User.findById(req.user);
+    if (user) {
+      responseData.phoneNumber = user.phoneNumber;
+    }
+  }
+
   const io = req.app.get("io");
-  io.emit(NEW_ORDER, realTimeOrder);
+  io.emit(NEW_ORDER, responseData);
 
   res.status(200).json({
     success: true,
     message: "We will reach you in 2 minutes",
-    realTimeOrder,
+    realTimeOrder: responseData,
   });
 });
 
