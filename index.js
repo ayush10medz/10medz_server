@@ -16,6 +16,8 @@ import cookieParser from "cookie-parser";
 import { Server } from "socket.io";
 import { socketAuthenticator } from "./middleware/auth.js";
 
+import mongoose from "mongoose";
+
 export const userSocketIDs = new Map();
 
 dotenv.config({});
@@ -37,7 +39,13 @@ const io = new Server(server, {
 app.set("io", io);
 
 try {
-  connectDB(process.env.MONGODB); // Handle potential DB connection errors
+  // connectDB(process.env.MONGODB); // Handle potential DB connection errors
+  mongoose.connect(process.env.MONGODB_URI, {
+    useNewUrlParser: true,
+    useUnifiedTopology: true,
+  })
+  .then(() => console.log("MongoDB connected!"))
+  .catch(err => console.error("MongoDB connection error:", err));
 } catch (error) {
   console.error("Failed to connect to MongoDB:", error);
   process.exit(1);
