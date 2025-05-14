@@ -75,6 +75,7 @@ Only include medicines and medical consumables (e.g., surgical dressings, orthop
         ],
         max_tokens: 1500,
         temperature: 0,
+        store: false
     });
 
     const rawText = response?.choices?.[0]?.message?.content;
