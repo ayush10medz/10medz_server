@@ -43,11 +43,11 @@ export const handleOrder = TryCatch(async (req, res, next) => {
     const user = await User.findById(req.user);
     if (user && user.phoneNumber) {
       // Send notification to customer number : English
-      const message = `🌟 Your health matters to us!
-✅ We’ve received your medicine order.
-💊 Our team will make sure your essentials are delivered safely and promptly.
-🙏 Stay well and thank you for trusting us with your care!`;
-      await sendUserNotification(user.phoneNumber, message);
+      //       const message = `🌟 Your health matters to us!
+      // ✅ We’ve received your medicine order.
+      // 💊 Our team will make sure your essentials are delivered safely and promptly.
+      // 🙏 Stay well and thank you for trusting us with your care!`;
+      //       await sendUserNotification(user.phoneNumber, message);
 
       // Send notification to customer number : Hindi
       const hindiMessage = `🌟 आपका स्वास्थ्य हमारे लिए महत्वपूर्ण है!
