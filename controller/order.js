@@ -38,17 +38,28 @@ export const handleOrder = TryCatch(async (req, res, next) => {
   const order = new Order(orderData);
   await order.save();
 
-  // Send notification to admin number
-  const adminPhoneNumber = '7852835056'; // Your number
-  const adminMessage = 'New order received!'; // Message for admin
-  await sendUserNotification(adminPhoneNumber, adminMessage);
-
   // Send user notification (SMS for now) if user is authenticated
   if (req.user) {
     const user = await User.findById(req.user);
     if (user && user.phoneNumber) {
-      const message = "Your order has been created. Our team will deliver it to you shortly.";
+      // Send notification to customer number : English
+      const message = `🌟 Your health matters to us!
+✅ We’ve received your medicine order (${order?._id}).
+💊 Our team will make sure your essentials are delivered safely and promptly.
+🙏 Stay well and thank you for trusting us with your care!`;
       await sendUserNotification(user.phoneNumber, message);
+
+      // Send notification to customer number : Hindi
+      const hindiMessage = `🌟 आपका स्वास्थ्य हमारे लिए महत्वपूर्ण है!
+✅ हमने आपकी दवा का ऑर्डर (${order._id}) प्राप्त कर लिया है।
+💊 हमारी टीम आपके ज़रूरी मेडिसिन्स को सुरक्षित और जल्द से जल्द डिलीवर करेगी।
+🙏 स्वस्थ रहें, और हम पर भरोसा करने के लिए धन्यवाद!`;
+      await sendUserNotification(user.phoneNumber, hindiMessage);
+
+      // Send notification to admin number
+      const adminPhoneNumber = '7852835056';
+      const adminMessage = `🤩 Ka-ching! ${name} (${user.phoneNumber}) just placed an order! 📲`;
+      await sendUserNotification(adminPhoneNumber, adminMessage);
     }
   }
 
