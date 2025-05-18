@@ -57,7 +57,7 @@ export const handleOrder = TryCatch(async (req, res, next) => {
       await sendUserNotification(user.phoneNumber, hindiMessage);
 
       // Send notification to admin number
-      const adminPhoneNumber = '7389732171';
+      const adminPhoneNumber = '7742464697';
       const adminMessage = `🤩 Ka-ching! ${name} (${user.phoneNumber}) just placed an order!  
 🛠️ Please prepare and deliver it as soon as possible.  
 😊 Let’s make another customer happy!`;
