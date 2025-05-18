@@ -5,6 +5,19 @@ import { v4 as uuid } from "uuid";
 import mongoose from "mongoose";
 import { getBase64 } from "../lib/helper.js";
 
+// Import AWS SDK
+// import AWS from 'aws-sdk';
+// Import OTP utility function
+import { sendSMSNotification } from '../utility/otp.utility.js';
+
+// Configure AWS SDK (ensure this is done elsewhere if already configured globally)
+// AWS.config.update({
+//     region: process.env.AWS_REGION || 'your-aws-region'
+// });
+
+// If you are using Pinpoint, you might need to initialize it:
+// const pinpoint = new AWS.Pinpoint();
+
 export const connectDB = (url) => {
   mongoose
     .connect(url, { dbName: "medz" })
@@ -80,5 +93,18 @@ export const uploadFilesToCloudinary = async (files = []) => {
   } catch (error) {
     console.log("error uploading files to cloudinary", error);
     throw new Error("error uploading files to cloudinary", error);
+  }
+};
+
+// Function to send general user notifications (currently using SMS via SNS)
+export const sendUserNotification = async (mobileNumber, message) => {
+  try {
+    // Using the existing SMS sending function for now
+    await sendSMSNotification(mobileNumber, message);
+    console.log(`SMS notification sent to ${mobileNumber} with message: ${message}`);
+  } catch (error) {
+    console.error('Error sending user notification (SMS):', error);
+    // Depending on requirements, you might want to throw the error or handle it gracefully
+    // throw new Error('Failed to send user notification');
   }
 };

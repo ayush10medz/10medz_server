@@ -40,3 +40,24 @@ export const sendOTPViaSMS = async (mobileNumber, otp) => {
         throw new Error('Failed to send OTP SMS');
     }
 };
+
+// Function to send general SMS notifications using AWS SNS
+export const sendSMSNotification = async (mobileNumber, message) => {
+    try {
+        // Format the mobile number for India
+        const formattedNumber = `+91${mobileNumber}`;
+
+        const params = {
+            Message: message, // Use the provided message directly
+            PhoneNumber: formattedNumber,
+        };
+
+        const result = await sns.publish(params).promise();
+
+        console.log(`General SMS sent successfully. Message ID: ${result.MessageId}`);
+        return true;
+    } catch (error) {
+        console.error('Error sending general SMS:', error);
+        throw new Error('Failed to send SMS notification');
+    }
+};

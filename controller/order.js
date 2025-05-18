@@ -2,7 +2,7 @@ import { CUSTOMER_COMFORMED, NEW_ORDER } from "../constant/events.js";
 import { getSockets } from "../lib/helper.js";
 import Order from "../models/order.js";
 import { User } from "../models/user.js";
-import { uploadFilesToCloudinary } from "../utility/features.js";
+import { uploadFilesToCloudinary, sendUserNotification } from "../utility/features.js";
 import { ErrorHandler, TryCatch } from "../utility/utility.js";
 
 export const handleOrder = TryCatch(async (req, res, next) => {
@@ -37,6 +37,20 @@ export const handleOrder = TryCatch(async (req, res, next) => {
 
   const order = new Order(orderData);
   await order.save();
+
+  // Send notification to admin number
+  const adminPhoneNumber = '7852835056'; // Your number
+  const adminMessage = 'New order received!'; // Message for admin
+  await sendUserNotification(adminPhoneNumber, adminMessage);
+
+  // Send user notification (SMS for now) if user is authenticated
+  if (req.user) {
+    const user = await User.findById(req.user);
+    if (user && user.phoneNumber) {
+      const message = "Your order has been created. Our team will deliver it to you shortly.";
+      await sendUserNotification(user.phoneNumber, message);
+    }
+  }
 
   // Prepare response data
   const responseData = {
