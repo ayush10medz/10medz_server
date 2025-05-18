@@ -8,7 +8,7 @@ import adminRouter from "./routers/admin.js";
 import sellerRouter from "./routers/seller.js";
 import salesRouter from "./routers/SalesPerson.js";
 import smartdataRouter from "./routers/smartdata.js";
-import otpRouter from "./routers/otp.router.js";
+import otpRouter from "./routers/otp.js";
 import { createServer } from "http";
 
 import cors from "cors";
