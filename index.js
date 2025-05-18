@@ -7,6 +7,8 @@ import orderRouter from "./routers/order.js";
 import adminRouter from "./routers/admin.js";
 import sellerRouter from "./routers/seller.js";
 import salesRouter from "./routers/SalesPerson.js";
+import smartdataRouter from "./routers/smartdata.js";
+import otpRouter from "./routers/otp.router.js";
 import { createServer } from "http";
 
 import cors from "cors";
@@ -44,8 +46,8 @@ try {
     useNewUrlParser: true,
     useUnifiedTopology: true,
   })
-  .then(() => console.log("MongoDB connected!"))
-  .catch(err => console.error("MongoDB connection error:", err));
+    .then(() => console.log("MongoDB connected!"))
+    .catch(err => console.error("MongoDB connection error:", err));
 } catch (error) {
   console.error("Failed to connect to MongoDB:", error);
   process.exit(1);
@@ -80,6 +82,8 @@ app.use("/api/v1/order", orderRouter);
 app.use("/api/v1/admin", adminRouter);
 app.use("/api/v1/seller", sellerRouter);
 app.use("/api/v1/sales", salesRouter);
+app.use("/api/v1", smartdataRouter);
+app.use("/api/v1/otp", otpRouter);
 
 io.use((socket, next) => {
   cookieParser()(
