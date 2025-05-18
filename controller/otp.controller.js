@@ -33,7 +33,8 @@ export const sendOTP = async (req, res) => {
             message: 'OTP sent successfully'
         });
     } catch (error) {
-        console.error('Error in sendOTP:', error);
+        // console.error('Error in sendOTP:', error);
+        console.error('Detailed sendOTP error:', error.message, error.stack);
         res.status(500).json({ success: false, message: 'Internal server error' });
     }
 };

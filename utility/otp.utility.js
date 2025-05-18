@@ -26,7 +26,7 @@ export const sendOTPViaSMS = async (mobileNumber, otp) => {
         const formattedNumber = `+91${mobileNumber}`;
 
         const params = {
-            Message: `Your OTP for verification is: ${otp}. Valid for 5 minutes.`,
+            Message: `Your OTP for 10Medz.com verification is: ${otp}. Valid for 5 minutes.`,
             PhoneNumber: formattedNumber,
         };
 
@@ -35,7 +35,8 @@ export const sendOTPViaSMS = async (mobileNumber, otp) => {
         console.log(`SMS sent successfully. Message ID: ${result.MessageId}`);
         return true;
     } catch (error) {
-        console.error('Error sending SMS:', error);
+        // console.error('Error sending SMS:', error);
+        console.error('Detailed sendOTPViaSMS error:', error.message, error.stack);
         throw new Error('Failed to send OTP SMS');
     }
 };
