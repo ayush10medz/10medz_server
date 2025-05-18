@@ -51,14 +51,14 @@ export const handleOrder = TryCatch(async (req, res, next) => {
 
       // Send notification to customer number : Hindi
       const hindiMessage = `🌟 आपका स्वास्थ्य हमारे लिए महत्वपूर्ण है!
-✅ हमने आपकी दवा का ऑर्डर प्राप्त कर लिया है।
+✅ 10medz ने आपकी दवा का ऑर्डर सफलतापूर्वक प्राप्त कर लिया है।
 💊 हमारी टीम आपके ज़रूरी मेडिसिन्स को सुरक्षित और जल्द से जल्द डिलीवर करेगी।
-🙏 स्वस्थ रहें, और हम पर भरोसा करने के लिए धन्यवाद!`;
+🙏 10medz को अपनी हेल्थ केयर पार्टनर चुनने के लिए धन्यवाद!`;
       await sendUserNotification(user.phoneNumber, hindiMessage);
 
       // Send notification to admin number
-      const adminPhoneNumber = '7742464697';
-      const adminMessage = `🤩 Ka-ching! ${name} (${user.phoneNumber}) just placed an order!  
+      const adminPhoneNumber = '7389732171';
+      const adminMessage = `🤩 Ka-ching! ${name} (${user.phoneNumber}) just placed an order with 10medz!  
 🛠️ Please prepare and deliver it as soon as possible.  
 😊 Let’s make another customer happy!`;
       await sendUserNotification(adminPhoneNumber, adminMessage);
