@@ -35,6 +35,7 @@ const io = new Server(server, {
       "http://localhost:3000", // Consistent port
       "http://localhost:3001", // Consistent port
       "http://localhost:8080", // Consistent port
+      "https://server1.10medz.com", // Added for CORS
     ],
     methods: ["GET", "POST"],
     credentials: true,
@@ -66,6 +67,7 @@ app.use(
       "http://localhost:3000", // Consistent port
       "http://localhost:3001", // Consistent port
       "http://localhost:8080", // Consistent port
+      "https://server1.10medz.com", // Added for CORS
     ],
     credentials: true,
   })
