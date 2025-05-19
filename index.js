@@ -33,6 +33,8 @@ const io = new Server(server, {
       process.env.SELLER_URL,
       process.env.ADMIN_URL,
       "http://localhost:3000", // Consistent port
+      "http://localhost:3001", // Consistent port
+      "http://localhost:8080", // Consistent port
     ],
     methods: ["GET", "POST"],
     credentials: true,
@@ -62,6 +64,8 @@ app.use(
       process.env.SELLER_URL,
       process.env.ADMIN_URL,
       "http://localhost:3000", // Consistent port
+      "http://localhost:3001", // Consistent port
+      "http://localhost:8080", // Consistent port
     ],
     credentials: true,
   })
