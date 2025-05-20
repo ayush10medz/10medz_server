@@ -23,6 +23,7 @@ export const fetchSmartData = TryCatch(async (req, res, next) => {
 
     // Convert file to base64
     const base64Image = file.buffer.toString('base64');
+    const cleanedBase64Image = base64Image.replace(/^data:image\/\w+;base64,/, "");
 
     // Initialize OpenAI
     const openai = new OpenAI({
@@ -67,13 +68,13 @@ Only include medicines and medical consumables (e.g., surgical dressings, orthop
                     {
                         type: "image_url",
                         image_url: {
-                            url: `data:image/jpeg;base64,${base64Image}`,
+                            url: `data:image/jpeg;base64,${cleanedBase64Image}`,
                         },
                     },
                 ],
             },
         ],
-        max_tokens: 1500,
+        max_tokens: 2000,
         temperature: 0,
         store: false
     });
