@@ -18,7 +18,8 @@ export const fetchSmartData = TryCatch(async (req, res, next) => {
     // Validate file size (max 5MB)
     const maxSize = 5 * 1024 * 1024; // 5MB
     if (file.size > maxSize) {
-        return next(new ErrorHandler("File size too large. Maximum size is 5MB.", 400));
+        // Returning 413 as requested for large request entity
+        return next(new ErrorHandler("Request entity too large. Please ensure the image size is less than 5MB.", 413));
     }
 
     // Convert file to base64
@@ -83,7 +84,7 @@ Only include medicines and medical consumables (e.g., surgical dressings, orthop
     // console.log("🧾 GPT Raw Output:\n", rawText);
 
     if (!rawText) {
-        return next(new ErrorHandler("Failed to process image. Please try again.", 500));
+        return next(new ErrorHandler("Failed to extract data from the image. Please ensure the image is clear and try again.", 500));
     }
 
     // Clean JSON string
@@ -95,7 +96,7 @@ Only include medicines and medical consumables (e.g., surgical dressings, orthop
         parsed = JSON.parse(cleaned);
     } catch (error) {
         console.error("Error parsing GPT response:", error);
-        return next(new ErrorHandler("Failed to parse AI response. Please try again.", 500));
+        return next(new ErrorHandler("Failed to extract data from the image. Please ensure the image is clear and try again.", 500));
     }
 
     const doctorName = parsed["Doctor Name"] || null;
