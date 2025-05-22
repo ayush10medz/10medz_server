@@ -80,7 +80,7 @@ Only include medicines and medical consumables (e.g., surgical dressings, orthop
     });
 
     const rawText = response?.choices?.[0]?.message?.content;
-    console.log("🧾 GPT Raw Output:\n", rawText);
+    // console.log("🧾 GPT Raw Output:\n", rawText);
 
     if (!rawText) {
         return next(new ErrorHandler("Failed to process image. Please try again.", 500));
@@ -136,7 +136,7 @@ Only include medicines and medical consumables (e.g., surgical dressings, orthop
         };
     });
 
-    console.log("🧾 Final Results:\n", results);
+    // console.log("🧾 Final Results:\n", results);
     return res.status(200).json({
         success: true,
         data: {

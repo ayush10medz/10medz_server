@@ -78,7 +78,6 @@ export const handleSellerOrder = TryCatch(async (req, res, next) => {
     const ayush = io
       .to(userSocket)
       .emit(CUSTOMER_COMFORMATION, informationForConfirmation); // Corrected spelling
-    console.log(ayush);
 
     // Send success response
     res.status(200).json({

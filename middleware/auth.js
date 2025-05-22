@@ -51,7 +51,7 @@ export const socketAuthenticator = async (err, socket, next) => {
     socket.user = user;
     return next();
   } catch (error) {
-    console.log(error);
+    console.error("Error socketAuthenticator : ", error);
     return next(new ErrorHandler("Please login to access this route", 401));
   }
 };

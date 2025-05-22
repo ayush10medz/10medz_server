@@ -103,11 +103,11 @@ io.on("connection", (socket) => {
   console.log(`User connected with socket ID: ${socket.id}`);
 
   const user = socket.user;
-  console.log(user);
+  // console.log(user);
 
   userSocketIDs.set(user._id.toString(), socket.id);
 
-  console.log(userSocketIDs);
+  // console.log(userSocketIDs);
 
   socket.on("disconnect", () => {
     console.log(`User disconnected with socket ID: ${socket.id}`);

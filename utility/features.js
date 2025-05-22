@@ -25,7 +25,7 @@ export const connectDB = (url) => {
       console.log(`connect to DB : ${data.connection.host}`);
     })
     .catch((err) => {
-      console.log(err);
+      console.error("Error in mongo connect : ", err);
     });
 };
 
