@@ -112,6 +112,9 @@ Only include medicines and medical consumables (e.g., surgical dressings, orthop
         const inventoryMatch = findInventoryMatch(label || "");
         const availableInStock = !!inventoryMatch;
 
+        // Use matched inventory label if available, otherwise use original label
+        const finalLabel = inventoryMatch?.label || label;
+
         // --- Only use inventoryJson price/discount, never from matched ---
         const price = inventoryMatch && inventoryMatch.price !== undefined
             ? inventoryMatch.price
@@ -125,7 +128,7 @@ Only include medicines and medical consumables (e.g., surgical dressings, orthop
                 : "N/A";
 
         return {
-            label,
+            label: finalLabel,
             dosage,
             frequency,
             quantity,
