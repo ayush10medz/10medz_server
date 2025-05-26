@@ -37,7 +37,7 @@ export const fetchSmartData = TryCatch(async (req, res, next) => {
         messages: [
             {
                 role: "system",
-                content: `You are a medical assistant. Extract a complete list of all items from the handwritten Indian prescription image, including both medicines and medical consumables. Do not omit surgical or orthopedic supplies.
+                content: `You are an expert medical assistant specialized in interpreting handwritten Indian medical prescriptions. Your task is to meticulously extract a complete list of all items from the provided image, including all medicines (with their full names and strengths, if specified) and any medical consumables (e.g., surgical dressings, orthopedic supports). Be particularly careful with spelling and differentiation between similar medicine names.
 
 ❌ Exclude all medical tests or investigations such as:
 - CBC (Complete Blood Count)
@@ -75,7 +75,7 @@ Only include medicines and medical consumables (e.g., surgical dressings, orthop
                 ],
             },
         ],
-        max_tokens: 2000,
+        max_tokens: 3000,
         temperature: 0,
         store: false
     });
@@ -114,6 +114,8 @@ Only include medicines and medical consumables (e.g., surgical dressings, orthop
         const availableInStock = !!inventoryMatch;
 
         // Use matched inventory label if available, otherwise use original label
+        // console.log("🧾 inventoryMatch?.label:", inventoryMatch?.label);
+        // console.log("🧾 label:", label);
         const finalLabel = inventoryMatch?.label || label;
 
         // --- Only use inventoryJson price/discount, never from matched ---

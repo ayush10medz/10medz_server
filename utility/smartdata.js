@@ -11,11 +11,11 @@ export function normalize(text) {
         .toLowerCase();
 }
 
-// Create a Fuse.js instance for allMedicinesArray (simple name matching)
-const allMedicinesFuse = new Fuse(allMedicinesArray, {
-    includeScore: true,
-    threshold: 0.3, // Adjust threshold as needed for name matching
-});
+// Commented out allMedicinesFuse logic as requested
+// const allMedicinesFuse = new Fuse(allMedicinesArray, {
+//     includeScore: true,
+//     threshold: 0.3, // Adjust threshold as needed for name matching
+// });
 
 // 2. Prepare searchable (normalized) fields for inventoryJson
 const updatedInventoryJson = inventoryJson.map(inv => ({
@@ -27,26 +27,29 @@ const updatedInventoryJson = inventoryJson.map(inv => ({
 
 // 3. Fuse.js config for fuzzy searching inventoryJson
 const inventoryFuse = new Fuse(updatedInventoryJson, {
-    keys: ["normalizedLabel", "normalizedSalt", "normalizedCategory"],
+    keys: [
+        { name: "normalizedLabel", weight: 3 }, // Increased weight for label matches
+        { name: "normalizedSalt", weight: 1 },
+        { name: "normalizedCategory", weight: 0.5 }
+    ],
     includeScore: true,
-    threshold: 0.4, // Keep a slightly higher threshold for detailed inventory matching
+    threshold: 0.2, // Even lower threshold for more precise matching
+    minMatchCharLength: 4, // Increased minimum match length
+    shouldSort: true,
+    findAllMatches: false,
+    location: 0,
+    distance: 50, // Reduced distance for tighter matching
+    ignoreLocation: false, // Ensure location matters
+    useExtendedSearch: false,
+    tokenize: true, // Enable tokenization for better word matching
+    matchAllTokens: true, // Require all tokens to match
+    includeMatches: true // Include match details for better debugging
 });
 
 // 4. Find the best inventory match
 export function findInventoryMatch(medicineName) {
     const normName = normalize(medicineName);
-
-    // First, try to find a better candidate name from the comprehensive list
-    const nameSearch = allMedicinesFuse.search(normName);
-    let candidateName = normName;
-
-    // If a good match is found in the allMedicinesArray, use that as the candidate name
-    if (nameSearch.length > 0 && nameSearch[0].score < 0.2) { // Use a stricter score threshold for name matching
-        candidateName = normalize(nameSearch[0].item);
-    }
-
-    // Now, use the candidate name to search the inventory
-    let finalSearchName = candidateName;
+    let finalSearchName = normName;
 
     // Strong (exact) match in inventory
     let exact = updatedInventoryJson.find(item =>
@@ -76,7 +79,9 @@ export function findInventoryMatch(medicineName) {
         }
     }
 
-    // Fuzzy fallback using inventoryFuse with the candidate name
+    // Fuzzy fallback using inventoryFuse with stricter matching
     const result = inventoryFuse.search(finalSearchName);
-    return result.length > 0 ? result[0].item : null;
+
+    // Only return if the match score is very good
+    return result.length > 0 && result[0].score < 0.2 ? result[0].item : null;
 }
