@@ -33,17 +33,14 @@ const inventoryFuse = new Fuse(updatedInventoryJson, {
         { name: "normalizedCategory", weight: 0.5 }
     ],
     includeScore: true,
-    threshold: 0.2, // Even lower threshold for more precise matching
+    threshold: 0.15, // More precise threshold for exact matching
     minMatchCharLength: 4, // Increased minimum match length
     shouldSort: true,
     findAllMatches: false,
     location: 0,
     distance: 50, // Reduced distance for tighter matching
     ignoreLocation: false, // Ensure location matters
-    useExtendedSearch: false,
-    tokenize: true, // Enable tokenization for better word matching
-    matchAllTokens: true, // Require all tokens to match
-    includeMatches: true // Include match details for better debugging
+    useExtendedSearch: false
 });
 
 // 4. Find the best inventory match
@@ -59,10 +56,10 @@ export function findInventoryMatch(medicineName) {
     );
     if (exact) return exact;
 
-    // Partial/substring match in inventory
+    // Partial/substring match in inventory with length check
     for (const item of updatedInventoryJson) {
         if (
-            finalSearchName && (
+            finalSearchName && finalSearchName.length >= 4 && (
                 item.normalizedLabel.includes(finalSearchName) ||
                 finalSearchName.includes(item.normalizedLabel) ||
                 (item.normalizedSalt && (
@@ -83,5 +80,5 @@ export function findInventoryMatch(medicineName) {
     const result = inventoryFuse.search(finalSearchName);
 
     // Only return if the match score is very good
-    return result.length > 0 && result[0].score < 0.2 ? result[0].item : null;
+    return result.length > 0 && result[0].score < 0.15 ? result[0].item : null;
 }

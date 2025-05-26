@@ -3623,7 +3623,7 @@ export const inventoryJson = [
         "salt": "",
         "mrp": 26.65,
         "price": 19.99,
-        "discount": "25.00",
+        "discount": "5.00",
         "value": "tryptowin1010"
     },
     {
